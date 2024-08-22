@@ -1,0 +1,31 @@
+# fly.toml app configuration file generated for irish-visa-check on 2024-08-22T22:06:52+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'irish-visa-check'
+primary_region = 'ams'
+
+[build]
+
+[env]
+  PORT = '1234'
+  STORAGE_PATH = '/var/storage/store.json'
+
+[processes]
+  app = 'run -A --unstable main.ts'
+
+[http_service]
+  internal_port = 1234
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
+
+[[mounts]]
+  source = 'storage'
+  destination = '/var/storage'
