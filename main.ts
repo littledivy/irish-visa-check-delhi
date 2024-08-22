@@ -8,6 +8,8 @@ const headers = {
 
 const base = "https://www.ireland.ie";
 
+const storePath = Deno.env.get("STORAGE_PATH") || "store.json";
+
 function fetchAndDecode<T>(
   url: string,
   decoder: (data: ArrayBuffer) => T,
@@ -88,17 +90,11 @@ async function scrapeLink(): Promise<string> {
     });
 }
 
-const kv = await Deno.openKv();
-
 async function job() {
   const link = await scrapeLink();
   const decisions = await getDecisions(link);
 
-  await Promise.all(
-    Object.entries(decisions).map(([id, status]) =>
-      kv.set(["decisions", id], status)
-    ),
-  );
+  await Deno.writeTextFile(storePath, JSON.stringify(decisions));
 }
 
 Deno.cron("collect decisions", "0 */12 * * *", job);
@@ -112,8 +108,12 @@ Deno.serve(
       new Response(index, { headers: { "content-type": "text/html" } }),
     "/decision/:id": async (req, _, { id }) => {
       if (!id) return new Response("No ID provided", { status: 400 });
-      const decision = await kv.get(["decisions", id]);
-      return new Response(decision.value as any);
+
+      const store = JSON.parse(await Deno.readTextFile(storePath));
+      const decision = store[id];
+      if (!decision) return new Response("No decision found", { status: 404 });
+
+      return new Response(decision as any);
     },
     "/run-job": async () => {
       await job();
