@@ -1,124 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Check Ireland Visa Decision</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+      h1 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
 
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
+      .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
 
-        .input-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
+      .input-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
 
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            margin-right: 10px;
-        }
+      input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-right: 10px;
+      }
 
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
 
-        button:hover {
-            background-color: #218838;
-        }
+      button:hover {
+        background-color: #218838;
+      }
 
-        #decision {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
-        }
+      #decision {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #333;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>Check Ireland Visa Decision</h1>
+      <h1>Check Ireland Visa Decision</h1>
 
-        <div class="input-container">
-            <input type="text" id="visaNumber" placeholder="Visa Number">
-            <button onclick="getDecision()">Check</button>
-        </div>
+      <div class="input-container">
+        <input type="text" id="visaNumber" placeholder="Visa Number" />
+        <button onclick="getDecision()">Check</button>
+      </div>
 
-        <div id="decision"></div>
+      <div id="decision"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <script>
-        const visaNumber = document.getElementById('visaNumber');
-        const decision = document.getElementById('decision');
+      const visaNumber = document.getElementById("visaNumber");
+      const decision = document.getElementById("decision");
 
-        async function getDecision() {
-            try {
-                const response = await fetch(`/decision/${visaNumber.value}`);
-                const data = await response.text();
+      async function getDecision() {
+        try {
+          const response = await fetch(`/decision/${visaNumber.value}`);
+          const data = await response.text();
 
-                if (data == 'Approved') {
-		    decision.innerHTML = `Congratulations! Your visa has been approved.`;
-                    triggerConfetti();
-                } else if (data == 'Rejected') {
-		    decision.innerHTML = `Sorry! Your visa has been rejected.`;
-		} else {
-		    decision.innerHTML = `No decision yet.`;
-		}
-            } catch (error) {
-                console.error(error);
-                decision.innerHTML = `Error: ${error}`;
-            }
+          if (data == "Approved") {
+            decision.innerHTML = `Congratulations! Your visa has been approved.`;
+            triggerConfetti();
+          } else if (data == "Rejected") {
+            decision.innerHTML = `Sorry! Your visa has been rejected.`;
+          } else {
+            decision.innerHTML = `No decision yet.`;
+          }
+        } catch (error) {
+          console.error(error);
+          decision.innerHTML = `Error: ${error}`;
         }
+      }
 
-        function triggerConfetti() {
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
+      function triggerConfetti() {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+      }
     </script>
-</body>
-
+  </body>
 </html>
-
