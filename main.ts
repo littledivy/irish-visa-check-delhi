@@ -1,6 +1,30 @@
 import XLSX from "jsr:@mirror/xlsx@0.20.3";
 import { router } from "https://deno.land/x/rutt@0.2.0/mod.ts";
 
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+
+async function sendEmail(subject: string, html: string) {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+    },
+    body: JSON.stringify({
+      from: "Ireland Visa check <no-reply@irish-visa-check.fly.dev>",
+      to: ["dj.srivastava23@gmail.com"],
+      subject,
+      html,
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("Failed to send email", res.status, await res.text());
+  }
+
+  return res;
+}
+
 const headers = {
   "User-Agent":
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299",
@@ -95,6 +119,17 @@ async function job() {
   const decisions = await getDecisions(link);
 
   await Deno.writeTextFile(storePath, JSON.stringify(decisions));
+
+  if (decisions["48056052"]) {
+    await sendEmail(
+      "Your visa decisions is out!",
+      "<p>Your visa decision is out. Check it <a href='https://irish-visa-check.fly.dev/decision/48056052'>here</a></p>",
+    );
+  }
+  await sendEmail(
+    "New decisions available",
+    "<p>Decisions have been updated at <a href='https://irish-visa-check.fly.dev'>irish-visa-check.fly.dev</a></p>",
+  );
 }
 
 Deno.cron("collect decisions", "0 */12 * * *", job);
