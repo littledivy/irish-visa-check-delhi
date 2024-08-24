@@ -120,10 +120,10 @@ async function job() {
 
   await Deno.writeTextFile(storePath, JSON.stringify(decisions));
 
-  if (decisions["48056052"]) {
+  if (decisions["69349742"]) {
     await sendEmail(
       "Your visa decisions is out!",
-      "<p>Your visa decision is out. Check it <a href='https://irish-visa-check.fly.dev/decision/48056052'>here</a></p>",
+      "<p>Your visa decision is out. Check it <a href='https://irish-visa-check.fly.dev/decision/69349742'>here</a></p>",
     );
   }
   await sendEmail(
