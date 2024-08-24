@@ -11,7 +11,7 @@ async function sendEmail(subject: string, html: string) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "Ireland Visa check <no-reply@irish-visa-check.fly.dev>",
+      from: "Ireland Visa check <ireland-visa-check@littledivy.com>",
       to: ["dj.srivastava23@gmail.com"],
       subject,
       html,
